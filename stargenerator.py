@@ -37,7 +37,7 @@ sptypedata = {
 'M6V' : [16.62, 0.10], 'M7V' : [17.81, 0.090],
 'M8V' : [18.84, 0.082], 'M9V' : [19.36, 0.079],
 }
-def genstar():
+def genstar(avg_age):
     # determine spectral type
     sp1 = random.choices(['O', 'B', 'A', 'F', 'G', 'K', 'M'], weights=[0.01, 0.12, 0.61, 3.03, 7.64, 12.13, 76.46])[0]
     sp2 = random.randint(0, 9)
@@ -49,10 +49,13 @@ def genstar():
     mass = round(mass+random.uniform(-(mass/10), mass/10), 3)
     absmag = round(sptypedata[sptype][0]+random.uniform(-0.1, 0.1), 2)
     # non-main sequence stars, partially based on TTarrants' code
-    if sp1 in 'GKM' and random.uniform(0, 1) < 0.01:
+    if sp1 in 'FGKM' and random.uniform(0, 1) < 0.01: # subdwarfs
         lum = 'VI'
+    if sp1 == 'O' and random.uniform(0, 1) < 0.01: # Wolf-Rayet stars
+        sp1 = random.choice(['WN', random.choice(['WC', 'WO'])])
+        lum = ''
     texture = ''
-    age = random.uniform(0.01, 10)
+    age = random.uniform(0.001, avg_age*2)
     luminosity = mass**3.5
     ms_life = 10.9 * mass / luminosity
     if age > ms_life:
@@ -73,6 +76,8 @@ def genstar():
                 sp1 = 'M'
                 texture = 'Red-Giant'
                 absmag = round(random.uniform(-0.7, 0.0), 2)
+                if random.uniform(0, 1) < 0.01: # carbon stars
+                    sp1 = random.choice(['C', 'S'])
             elif mass > 5:
                 sp1 = 'O'
                 absmag = round(random.uniform(-6.5, -5.1), 2)
@@ -83,15 +88,19 @@ def genstar():
             sp1 = 'M'
             texture = 'RBG'
             absmag = round(random.uniform(-3.0, -2.6), 2)
+            if random.uniform(0, 1) < 0.01: # carbon stars
+                sp1 = random.choice(['C', 'S'])
         elif postms_age < (ms_life * 0.18):
             lum = random.choice(['Ia', 'Ib'])
             sp1 = 'M'
             texture = 'RSG'
             #absmag = round(random.uniform(-7.2, -5.0), 2)
             absmag = round(random.uniform(-3.0, -2.6), 2)
+            if random.uniform(0, 1) < 0.01: # carbon stars
+                sp1 = random.choice(['C', 'S'])
         else:
             if mass < 1.4: # Chandrasekhar limit
-                sp1 = random.choice(['DA', 'DB', 'DC', 'DO', 'DQ', 'DZ', 'DX'])
+                sp1 = random.choice(['DA', 'DB', 'DC', 'DO', 'DQ', 'DZ', 'DX', 'sdO', 'sdB'])
                 lum = ''
                 absmag = 15
             elif mass < 2.16: # Oppenheimer-Volkoff limit
@@ -115,6 +124,7 @@ layout = [
     [sg.Text('Number of stars:'), sg.Input(size=(30,1), key='NStars', default_text='10000', disabled_readonly_background_color='#bbbbbb', disabled_readonly_text_color='#444444')],
     [sg.Checkbox('Calculate number of stars from radius', key='CalcNStars', default=False, enable_events=True)],
     [sg.Text('Clustering (1-3, smaller = denser):'), sg.Input(size=(20,1), key='Density', default_text='2')],
+    [sg.Text('Average age (Gyr:)'), sg.Input(size=(25,1), key='AvgAge', default_text='5')],
     [sg.Text('Seed:'), sg.Input(size=(20,1), key='Seed', default_text=str(random.randint(1, 1000000000))),
     sg.Text('Prefix:'), sg.Input(size=(15,1), key='Prefix', default_text='RS-')],
     [sg.Text('File name:'), sg.Input(key='Filename', default_text='randomstars')],
@@ -132,6 +142,7 @@ while True:
         window['Radius'].update('100')
         window['NStars'].update('10000')
         window['Density'].update('2')
+        window['AvgAge'].update('5')
         window['Prefix'].update('RS-')
         window['Seed'].update(str(random.randint(1, 1000000000)))
         window['Filename'].update('randomstars')
@@ -151,6 +162,8 @@ while True:
             window['Output'].update('Error: missing number of stars!')
         elif values['Density'] == '':
             window['Output'].update('Error: missing density!')
+        elif values['AvgAge'] == '':
+            window['Output'].update('Error: missing average age!')
         elif values['Prefix'] == '':
             window['Output'].update('Error: missing prefix!')
         else:
@@ -168,6 +181,7 @@ while True:
             if values['CalcNStars'] == False:
                 nstars = eval(values['NStars'])
             density = eval(values['Density'])
+            avg_age = eval(values['AvgAge'])
             if values['Seed'] == '':
                 seed = random.randint(1, 1000000000)
             else:
@@ -193,8 +207,8 @@ while True:
                 inc = round(random.uniform(0, 360), 3)
                 node = round(random.uniform(0, 360), 3)
                 if random.uniform(0, 1) < 0.2: # 20% chance of binary
-                    stardata1 = genstar()
-                    stardata2 = genstar()
+                    stardata1 = genstar(avg_age)
+                    stardata2 = genstar(avg_age)
                     sptype1 = stardata1[0]
                     sptype2 = stardata2[0]
                     absmag1 = stardata1[1]
@@ -262,7 +276,7 @@ while True:
                     outfile.write('\t}\n')
                     outfile.write('}\n\n')
                 else:
-                    stardata = genstar()
+                    stardata = genstar(avg_age)
                     sptype = stardata[0]
                     absmag = stardata[1]
                     mass = stardata[2]
