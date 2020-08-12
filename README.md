@@ -11,3 +11,9 @@ for their similar generators, and the following webpages:
 * https://en.wikipedia.org/wiki/Spherical_coordinate_system
 * http://datagenetics.com/blog/january32020/index.html
 * https://www.pas.rochester.edu/~emamajek/EEM_dwarf_UBVIJHK_colors_Teff.txt
+
+Here's a screenshot to show what the program looks like:
+![Screenshot1](stargenerator.png)
+
+and an example of its output:
+![Screenshot2](example.png)
