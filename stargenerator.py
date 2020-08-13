@@ -121,7 +121,7 @@ layout = [
     sg.Text('Dec (degrees:)'), sg.Input(size=(15,1), key='Dec', default_text='21.8947')],
     [sg.Text('Distance (light-years):'), sg.Input(size=(30,1), key='Distance', default_text='2022000')],
     [sg.Text('Radius (light-years):'), sg.Input(size=(30,1), key='Radius', default_text='100')],
-    [sg.Text('Number of stars:'), sg.Input(size=(30,1), key='NStars', default_text='10000', disabled_readonly_background_color='#bbbbbb', disabled_readonly_text_color='#444444')],
+    [sg.Text('Number of stars:'), sg.Input(size=(30,1), key='NStars', default_text='10000', disabled_readonly_background_color='#bbbbbb')],
     [sg.Checkbox('Calculate number of stars from radius', key='CalcNStars', default=False, enable_events=True)],
     [sg.Text('Clustering (1-3, smaller = denser):'), sg.Input(size=(20,1), key='Density', default_text='2')],
     [sg.Text('Average age (Gyr:)'), sg.Input(size=(25,1), key='AvgAge', default_text='5')],
@@ -151,9 +151,9 @@ while True:
         window['Output'].update('All fields reset!')
     if event.startswith('CalcNStars'):
         if values['CalcNStars'] == True:
-            window['NStars'].update(disabled=True)
+            window['NStars'].update(disabled=True, text_color='#444444')
         if values['CalcNStars'] == False:
-            window['NStars'].update(disabled=False)
+            window['NStars'].update(disabled=False, text_color='#000000')
     if event == 'Generate':
         window['Output'].update('Generating stars...')
         if values['RA'] == '' or values['Dec'] == '' or values['Distance'] == '':
