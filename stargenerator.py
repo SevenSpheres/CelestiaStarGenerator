@@ -131,7 +131,7 @@ layout = [
     [sg.Text('File name:'), sg.Input(key='Filename', default_text='randomstars')],
     [sg.Button('Generate'), sg.Button('Reset'), sg.Button('Exit'), sg.Text(size=(25,1), key='Output')],
 ]
-window = sg.Window('Star Generator', layout)
+window = sg.Window('Celestia Star Generator', layout, icon='sgicon.ico')
 while True:
     event, values = window.read()
     if event == sg.WIN_CLOSED or event == 'Exit':
