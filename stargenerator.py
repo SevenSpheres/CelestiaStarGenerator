@@ -248,6 +248,8 @@ while True:
                     outfile.write('\t\tInclination %s\n' % inc)
                     outfile.write('\t\tAscendingNode %s\n' % node)
                     outfile.write('\t}\n')
+                    if sptype1 == 'X':
+                        outfile.write('\tRadius %s\n' % round(mass1*2.95))
                     if texture1 == 'RBG':
                         outfile.write('\tMesh "RBG.cmod"\n')
                     if texture1 == 'RSG':
@@ -267,6 +269,8 @@ while True:
                     outfile.write('\t\tInclination %s\n' % inc)
                     outfile.write('\t\tAscendingNode %s\n' % node)
                     outfile.write('\t\tArgOfPericenter 180\n')
+                    if sptype2 == 'X':
+                        outfile.write('\tRadius %s\n' % round(mass2*2.95))
                     if texture2 == 'RBG':
                         outfile.write('\tMesh "RBG.cmod"\n')
                     if texture2 == 'RSG':
@@ -288,6 +292,8 @@ while True:
                     outfile.write('\tDistance %s\n' % round(dist, 4))
                     outfile.write('\tSpectralType "%s"\n' % sptype)
                     outfile.write('\tAbsMag %s\n' % absmag)
+                    if sptype == 'X':
+                        outfile.write('\tRadius %s\n' % round(mass*2.95))
                     if texture == 'RBG':
                         outfile.write('\tMesh "RBG.cmod"\n')
                     if texture == 'RSG':
