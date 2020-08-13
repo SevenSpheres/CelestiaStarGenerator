@@ -127,6 +127,7 @@ layout = [
     [sg.Text('Average age (Gyr:)'), sg.Input(size=(25,1), key='AvgAge', default_text='5')],
     [sg.Text('Seed:'), sg.Input(size=(20,1), key='Seed', default_text=str(random.randint(1, 1000000000))),
     sg.Text('Prefix:'), sg.Input(size=(15,1), key='Prefix', default_text='RS-')],
+    [sg.Text('Number to start at:'), sg.Input(size=(25,1), key='FirstN', default_text='1')],
     [sg.Text('File name:'), sg.Input(key='Filename', default_text='randomstars')],
     [sg.Button('Generate'), sg.Button('Reset'), sg.Button('Exit'), sg.Text(size=(25,1), key='Output')],
 ]
@@ -144,6 +145,7 @@ while True:
         window['Density'].update('2')
         window['AvgAge'].update('5')
         window['Prefix'].update('RS-')
+        window['FirstN'].update('1')
         window['Seed'].update(str(random.randint(1, 1000000000)))
         window['Filename'].update('randomstars')
         window['Output'].update('All fields reset!')
@@ -166,9 +168,12 @@ while True:
             window['Output'].update('Error: missing average age!')
         elif values['Prefix'] == '':
             window['Output'].update('Error: missing prefix!')
+        elif values['FirstN'] == '':
+            window['Output'].update('Error: missing first number!')
         else:
             outfile = open('%s.stc' % values['Filename'], 'w')
             catalog = values['Prefix']
+            firstn = eval(values['FirstN'])
             basera = eval(values['RA']) # phi
             basedec = eval(values['Dec']) # theta
             basedist = eval(values['Distance']) # rho
@@ -230,15 +235,15 @@ while True:
                     sma = random.uniform(0.5, 50)
                     period = sqrt((sma**3) * (1/(mass1+mass2)))
                     ecc = random.uniform(0.0, 0.9)
-                    outfile.write('Barycenter "%s%s"\n' % (catalog, i+1))
+                    outfile.write('Barycenter "%s%s"\n' % (catalog, i+firstn))
                     outfile.write('{\n')
                     outfile.write('\tRA %s\n' % round(ra, 8))
                     outfile.write('\tDec %s\n' % round(dec, 8))
                     outfile.write('\tDistance %s\n' % round(dist, 4))
                     outfile.write('}\n\n')
-                    outfile.write('"%s%s A"\n' % (catalog, i+1))
+                    outfile.write('"%s%s A"\n' % (catalog, i+firstn))
                     outfile.write('{\t# Mass %s M_Sun\n' % mass1)
-                    outfile.write('\tOrbitBarycenter "%s%s"\n' % (catalog, i+1))
+                    outfile.write('\tOrbitBarycenter "%s%s"\n' % (catalog, i+firstn))
                     outfile.write('\tSpectralType "%s"\n' % sptype1)
                     outfile.write('\tAbsMag %s\n' % absmag1)
                     outfile.write('\tEllipticalOrbit {\n')
@@ -257,9 +262,9 @@ while True:
                     if texture1 != '':
                         outfile.write('\tTexture "%s.*"\n' % texture1)
                     outfile.write('}\n\n')
-                    outfile.write('"%s%s B"\n' % (catalog, i+1))
+                    outfile.write('"%s%s B"\n' % (catalog, i+firstn))
                     outfile.write('{\t# Mass %s M_Sun\n' % mass2)
-                    outfile.write('\tOrbitBarycenter "%s%s"\n' % (catalog, i+1))
+                    outfile.write('\tOrbitBarycenter "%s%s"\n' % (catalog, i+firstn))
                     outfile.write('\tSpectralType "%s"\n' % sptype2)
                     outfile.write('\tAbsMag %s\n' % absmag2)
                     outfile.write('\tEllipticalOrbit {\n')
@@ -285,7 +290,7 @@ while True:
                     absmag = stardata[1]
                     mass = stardata[2]
                     texture = stardata[3]
-                    outfile.write('"%s%s"\n' % (catalog, i+1))
+                    outfile.write('"%s%s"\n' % (catalog, i+firstn))
                     outfile.write('{\t# Mass %s M_Sun\n' % mass)
                     outfile.write('\tRA %s\n' % round(ra, 8))
                     outfile.write('\tDec %s\n' % round(dec, 8))
