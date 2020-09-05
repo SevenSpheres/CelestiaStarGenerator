@@ -2,9 +2,11 @@ import random
 import PySimpleGUI as sg
 from math import sqrt, pi, degrees, radians, sin, cos, tan, asin, acos, atan, atan2
 sptypedata = {
-'O2V' : [-5.7, 28],   'O3V' : [-5.7, 28],
-'O4V' : [-5.5, 28],   'O5V' : [-5.4, 28],
-'O6V' : [-5.1, 28],   'O7V' : [-4.8, 28],
+'QS0Ia0' : [-15, 1000],   'QS1Ia0' : [-15, 500],
+'O0V' : [-7.0, 200],   'O1V' : [-6.5, 150],
+'O2V' : [-6.0, 100],   'O3V' : [-5.7, 75],
+'O4V' : [-5.5, 50],   'O5V' : [-5.4, 40],
+'O6V' : [-5.1, 30],   'O7V' : [-4.8, 28],
 'O8V' : [-4.5, 22.9], 'O9V' : [-4.2, 19.7],
 'B0V' : [-4.0, 17.5], 'B1V' : [-3.1, 11],
 'B2V' : [-1.7, 7.3],  'B3V' : [-1.1, 5.4],
@@ -39,11 +41,13 @@ sptypedata = {
 }
 def genstar(avg_age):
     # determine spectral type
-    sp1 = random.choices(['O', 'B', 'A', 'F', 'G', 'K', 'M'], weights=[0.01, 0.12, 0.61, 3.03, 7.64, 12.13, 76.46])[0]
+    sp1 = random.choices(['QS','O', 'B', 'A', 'F', 'G', 'K', 'M'], weights=[0.001, 0.01, 0.12, 0.61, 3.03, 7.64, 12.13, 76.46])[0]
     sp2 = random.randint(0, 9)
-    if sp1 == 'O' and sp2 < 2:
-        sp2 = 2
     lum = 'V'
+    if sp1 == 'QS' and sp2 > 1:
+       sp1 = 'G'
+       sp2 = 1
+       lum = 'Ia0'
     sptype = '%s%s%s' % (sp1, sp2, lum)
     mass = sptypedata[sptype][1]
     mass = round(mass+random.uniform(-(mass/10), mass/10), 3)
