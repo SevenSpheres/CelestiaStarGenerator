@@ -99,11 +99,12 @@ def genstar(avg_age, age_range):
             if random.uniform(0, 1) < 0.01: # carbon stars
                 sp1 = random.choice(['C', 'S'])
         else:
-            if mass < 1.4: # Chandrasekhar limit
+            if mass < 9:
                 sp1 = random.choice(['DA', 'DB', 'DC', 'DO', 'DQ', 'DZ', 'DX', 'sdO', 'sdB'])
                 lum = ''
+                mass = round(random.uniform(0.109 - 0.007, 0.109 + 0.007)*mass + random.uniform(0.394 - 0.025, 0.394 + 0.025), 3)
                 absmag = 15
-            elif mass < 2.16: # Oppenheimer-Volkoff limit
+            elif mass < 15:
                 sp1 = 'Q'
                 sp2 = ''
                 lum = ''
