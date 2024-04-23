@@ -1,5 +1,5 @@
 import random
-import PySimpleGUI as sg
+import FreeSimpleGUI as sg
 from math import *
 sptypedata = {
 'O2V' : [-5.80, 59],    'O3V' : [-5.80, 59],
